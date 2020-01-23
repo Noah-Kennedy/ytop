@@ -1,3 +1,4 @@
+use log::info;
 use num_rational::Ratio;
 use psutil::memory;
 use size::Size;
@@ -84,6 +85,9 @@ impl UpdatableWidget for MemWidget<'_> {
 		self.swap
 			.percents
 			.push((self.update_count as f64, swap.percent().into()));
+
+		info!("Mem update: main: {:?}", &self.main.percents);
+		info!("Mem update: swap: {:?}", &self.swap.percents);
 	}
 
 	fn get_update_interval(&self) -> Ratio<u64> {
@@ -93,6 +97,8 @@ impl UpdatableWidget for MemWidget<'_> {
 
 impl Widget for MemWidget<'_> {
 	fn draw(&mut self, area: Rect, buf: &mut Buffer) {
+		info!("Mem draw: main: {:?}", &self.main.percents);
+		info!("Mem draw: swap: {:?}", &self.swap.percents);
 		Chart::<String, String>::default()
 			.block(block::new(self.colorscheme, &self.title))
 			.x_axis(Axis::default().bounds([
